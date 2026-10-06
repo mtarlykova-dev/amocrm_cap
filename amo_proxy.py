@@ -192,6 +192,9 @@ def main(argv: list[str] | None = None) -> int:
     except (ValueError, AmoProxyError) as err:
         print(f"error: {err}", file=sys.stderr)
         return 1
+    except OSError as err:  # URLError, timeouts, proxy/tunnel failures
+        print(f"network error: {getattr(err, 'reason', err)}", file=sys.stderr)
+        return 1
 
     json.dump(result, sys.stdout, ensure_ascii=False, indent=2)
     sys.stdout.write("\n")
